@@ -1,4 +1,3 @@
-
 let address = 0x30
 
 enum Motorlist {
@@ -9,70 +8,72 @@ enum Motorlist {
 }
 
 enum Direction1 {
-    //% block="Forward"
+    //% block="Para a frente"
     Forward = 0,
-    //% block="Backward"
+    //% block="Para trás"
     Backward = 1
 }
+
 enum LED_rgb_L_R {
-    //% bolck="LED_R"
+    //% block="LED da direita"
     LED_R = 1,
-    //% bolck="LED_L"
+    //% block="LED da esquerda"
     LED_L = 0,
 }
 
 enum LED_color {
-    //% block="red"
+    //% block="Vermelho"
     red1 = 1,
-    //% block="green"
+    //% block="Verde"
     green1 = 2,
-    //% block="blue"
+    //% block="Azul"
     blue1 = 3,
-    //% block="cyan"
+    //% block="Ciano"
     cyan = 4,
-    //% block="purple"
+    //% block="Rosa"
     purple = 5,
-    //% block="white"
+    //% block="Branco"
     white = 6,
-    //% block="yellow"
+    //% block="Amarelo"
     yellow = 7,
-    //% block="Turn off LED"
+    //% block="Desligar LED"
     black = 8,
-
 }
+
+// Corrigi os nomes das variáveis aqui (estavam trocados _r com _l)
 enum pwm_led_l {
-    //% black="red"
-    pwm_red_r = 0x08,
-    //% black="green"
-    pwm_green_r = 0x07,
-    //% black="blue"
-    pwm_blue_r = 0x06,
+    //% block="vermelho"
+    pwm_red_l = 0x08,
+    //% block="verde"
+    pwm_green_l = 0x07,
+    //% block="azul"
+    pwm_blue_l = 0x06,
 }
 
 enum pwm_led_r {
-    //% black="red"
-    pem_red_l = 0x09,
-    //% black="green"
-    pwm_green_l = 0x0a,
-    //% black="blue"
-    pwm_blue_l = 0x05,
+    //% block="vermelho"
+    pwm_red_r = 0x09,
+    //% block="verde"
+    pwm_green_r = 0x0a,
+    //% block="azul"
+    pwm_blue_r = 0x05,
 }
 
-//% color="#AA278D"
-namespace MiniCar {
+//% weight=100 color=#0364db icon="\uf1b9"
+namespace JuniBot {
 
-    //% block="motor = | %motor Direction = | $direction speed = $pwmvalue"
+    //% block="Motor = | %motor Direção = | $direction Velocidade = $pwmvalue"
     //% pwmvalue.min=0 pwmvalue.max=255 
     //% group="Motor" weight=65
     export function motor(motor: Motorlist, direction: Direction1, pwmvalue: number) {
         switch (motor) {
-            case 1: // M1电机控制
+            case 1: // M1
                 if (direction) { 
                     motor_i2cWrite(0x01, pwmvalue); motor_i2cWrite(0x02, 0); }
                 else { 
                     motor_i2cWrite(0x02, pwmvalue); motor_i2cWrite(0x01, 0); }
                 break;
-            case 2: // M2电机控制
+            case 2: // M2
                 if (direction) { 
                     motor_i2cWrite(0x04, pwmvalue); motor_i2cWrite(0x03, 0); }
                 else { 
@@ -81,129 +82,109 @@ namespace MiniCar {
         }
     }
 
-
-    //% block="LED Show"
+    //% block="Sequência de LEDs"
     //% group="RGB LED" weight=65
     export function led_show() {
         let a, s, d;
 
         motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255);
         motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255);
-        //红色逐渐点亮
+        //Vermelho
         for (a = 255; a > 1; a--) {
             motor_i2cWrite(0x08, a);
             motor_i2cWrite(0x09, a);
             basic.pause(5);
         }
-        //绿色逐渐点亮
+        //Verde
         for (s = 255; s > 1; s--) {
             motor_i2cWrite(0x07, s);
             motor_i2cWrite(0x0a, s);
             basic.pause(5);
         }
-        //红色逐渐熄灭
+        //Vermelho apagar
         for (a = 0; a < 255; a++) {
             motor_i2cWrite(0x08, a);
             motor_i2cWrite(0x09, a);
             basic.pause(5);
         }
-        //blue
+        //Azul
         for (d = 255; d > 1; d--) {
             motor_i2cWrite(0x06, d);
             motor_i2cWrite(0x05, d);
             basic.pause(5);
         }
-        //green
+        //Verde apagar
         for (s = 0; s < 255; s++) {
             motor_i2cWrite(0x07, s);
             motor_i2cWrite(0x0a, s);
             basic.pause(5);
         }
-        //rad
+        //Vermelho acender
         for (a = 255; a > 1; a--) {
             motor_i2cWrite(0x08, a);
             motor_i2cWrite(0x09, a);
             basic.pause(5);
         }
+        //Azul apagar
         for (d = 0; d < 255; d++) {
             motor_i2cWrite(0x06, d);
             motor_i2cWrite(0x05, d);
             basic.pause(5);
         }
+        //Vermelho apagar
         for (a = 0; a < 255; a++) {
             motor_i2cWrite(0x08, a);
             motor_i2cWrite(0x09, a);
             basic.pause(5);
         }
-
-
     }
 
-    //% block="LED_R= |%color PWM= |$value"
-    //% direction.shadow=timePicker
+    //% block="LED da direita= |%color PWM= |$value"
     //% value.min=0 value.max=255
     //% group="RGB LED" weight=66
     export function PWM_LED_R(color: pwm_led_r, value: number) {
         motor_i2cWrite(color, value);
     }
-    //% block="LED_L= |%color PWM= |$value"
-    //% direction.shadow=timePicker
+
+    //% block="LED da esquerda= |%color PWM= |$value"
     //% value.min=0 value.max=255
     //% group="RGB LED" weight=67
     export function PWM_LED_L(color: pwm_led_l, value: number) {
         motor_i2cWrite(color, value);
     }
 
-    //% block="LED OFF"
+    //% block="Desligar LED"
     //% group="RGB LED" weight=64
     export function LED_OFF() {
         motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255);
         motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255);
     }
 
-
-    //% block="RGB = |%place color = |$color"
-    //% direction.shadow=timePicker
+    //% block="RGB = |%place Cor = |$color"
     //% group="RGB LED" weight=68
     export function led_rgb(place: LED_rgb_L_R, color: LED_color) {
-        if (place == 1) {
+        if (place == 1) { // Direita
             switch (color) {
-                case 1: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255); };
-                    break;
-                case 2: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 255); };
-                    break;
-                case 3: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 0); };
-                    break;
-                case 4: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 0); };
-                    break;
-                case 5: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 0); };
-                    break;
-                case 6: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 0); };
-                    break;
-                case 7: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 255); };
-                    break;
-                case 8: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255); };
-                    break;
+                case 1: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255); }; break;
+                case 2: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 255); }; break;
+                case 3: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 0); }; break;
+                case 4: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 0); }; break;
+                case 5: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 0); }; break;
+                case 6: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 0); }; break;
+                case 7: { motor_i2cWrite(0x08, 0); motor_i2cWrite(0x07, 0); motor_i2cWrite(0x06, 255); }; break;
+                case 8: { motor_i2cWrite(0x08, 255); motor_i2cWrite(0x07, 255); motor_i2cWrite(0x06, 255); }; break;
             }
         }
-        if (place == 0) {
+        if (place == 0) { // Esquerda
             switch (color) {
-                case 1: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255); };
-                    break;
-                case 2: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 255); };
-                    break;
-                case 3: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 0); };
-                    break;
-                case 4: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 0); };
-                    break;
-                case 5: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 0); };
-                    break;
-                case 6: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 0); };
-                    break;
-                case 7: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 255); };
-                    break;
-                case 8: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255); };
-                    break;
+                case 1: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255); }; break;
+                case 2: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 255); }; break;
+                case 3: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 0); }; break;
+                case 4: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 0); }; break;
+                case 5: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 0); }; break;
+                case 6: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 0); }; break;
+                case 7: { motor_i2cWrite(0x09, 0); motor_i2cWrite(0x0a, 0); motor_i2cWrite(0x05, 255); }; break;
+                case 8: { motor_i2cWrite(0x09, 255); motor_i2cWrite(0x0a, 255); motor_i2cWrite(0x05, 255); }; break;
             }
         }
     }
@@ -215,7 +196,8 @@ namespace MiniCar {
     const ECHO_PIN = DigitalPin.P15;
     pins.setPull(TRIG_PIN, PinPullMode.PullNone);
     let lastTime = 0;
-    //% block="Ultrasonic"
+    
+    //% block="Ultrassom (cm)"
     //% group="Ultrasonic Sensor" weight=67
     export function ultra(): number {
         //send trig pulse
@@ -225,9 +207,7 @@ namespace MiniCar {
         control.waitMicros(10);
         pins.digitalWritePin(TRIG_PIN, 0)
 
-        // read echo pulse  max distance : 6m(35000us)
-        //2020-7-6 
-        // pins.pulseIn():This function has a bug and returns data with large errors.
+        // read echo pulse max distance : 6m(35000us)
         let t = pins.pulseIn(ECHO_PIN, PulseValue.High, 35000);
         let ret = t;
 
@@ -236,43 +216,41 @@ namespace MiniCar {
             ret = lastTime;
         }
         lastTime = t;
-        //2020-7-6
-        //It would normally divide by 58, because the pins.pulseIn() function has an error, so it's divided by 58
+        
         return Math.round(ret / 58);
     }
 
     /**
      * photoresistance sensor
      */
-    //% block="LDR_L "
+    //% block="LDR da esquerda"
     //% group="Photoresistance Sensor" weight=66
     export function PH1(): number {
         return pins.analogReadPin(AnalogPin.P1);
     }
 
-    //% block="LDR_R "
+    //% block="LDR da direita"
     //% group="Photoresistance Sensor" weight=66
     export function PH2(): number {
         return pins.analogReadPin(AnalogPin.P0);
     }
 
     /**
-* return 0b01 or 0b10
-* 0b01 is the sensor on the left
-* 0b10 is the sensor on the right
-*/
-    pins.setPull(DigitalPin.P12, PinPullMode.PullUp);
-    pins.setPull(DigitalPin.P13, PinPullMode.PullUp);
-    //% block="Line Tracking"
+    * return 0b01 or 0b10
+    */
+    pins.setPull(DigitalPin.P12, PinPullMode.PullUp); // Nota: Alterado para PullUp
+    pins.setPull(DigitalPin.P13, PinPullMode.PullUp); // Nota: Alterado para PullUp
+    
+    //% block="Seguidor de Linha"
     //% group="Line Tracking" weight=68
     export function LineTracking(): number {
         let val = pins.digitalReadPin(DigitalPin.P12) << 0 | pins.digitalReadPin(DigitalPin.P13) << 1;
         return val;
     }
 
-    //% block="set servo to angle %angle"
+    //% block="Definir servo para ângulo %angle"
     //% group="Servo" weight=69
-    //% angle.min=0 angle.max.max=180
+    //% angle.min=0 angle.max=180
     export function setServo(angle: number): void {
         pins.servoWritePin(AnalogPin.P2, angle)
     }
