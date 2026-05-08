@@ -4,7 +4,7 @@
     "description": "KEYESTUDIO Microbit Smart Robot Car with Building Blocks",
     "dependencies": {
         "core": "*",
-        "pxt-ir-remote": "github:mworkfun/pxt-ir-remote#c10e5f2cfb043511430dbefb1b56a02f9e7ed175",
+        "controloiv": "github:junicoders/controloiv",
         "microphone": "*"
     },
     "files": [
