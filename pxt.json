@@ -3,7 +3,6 @@
     "version": "0.0.0",
     "description": "KEYESTUDIO Microbit Smart Robot Car with Building Blocks",
     "dependencies": {
-        "core": "*",
         "controloiv": "github:junicoders/controloiv",
         "microphone": "*"
     },
