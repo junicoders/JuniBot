@@ -4,7 +4,7 @@
     "description": "Extensao micro:bit para carro micro:bit da Junicoders. Adaptado e traduzido da extensao MiniCar (KEYESTUDIO).",
     "dependencies": {
         "core": "*",
-        "controloiv": "github:junicoders/controloiv",
+        "controloiv": "github:junicoders/controloiv#7ad6464444575e328c8c8ad4e2dabff71a51b560",
         "microphone": "*"
     },
     "files": [
