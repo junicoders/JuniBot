@@ -1,7 +1,7 @@
 {
     "name": "Mini Car",
     "version": "0.0.0",
-    "description": "KEYESTUDIO Microbit Smart Robot Car with Building Blocks",
+    "description": "Extensao micro:bit para carro micro:bit da Junicoders. Adaptado e traduzido da extensao MiniCar (KEYESTUDIO).",
     "dependencies": {
         "core": "*",
         "controloiv": "github:junicoders/controloiv",
